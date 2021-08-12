@@ -53,7 +53,7 @@ async def spam(event: NewMessage.Event) -> None:
     
 @client.onMessage(
     command=("`stop` - `Ferma lo spammer`", plugin_category),
-    outgoing=True, regex=r"stopspam(?: |$|\n)([\s\S]*)"
+    outgoing=True, regex=r"stop(?: |$|\n)([\s\S]*)"
 )    
 
 async def stop(event: NewMessage.Event) -> None:
