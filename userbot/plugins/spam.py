@@ -14,7 +14,7 @@ plugin_category = "utils"
 spam_val = False
 
 @client.onMessage(
-    command=("`spam` - `[Messaggio]`", plugin_category),
+    command=("`spam` - `Avvia lo spammer`", plugin_category),
     outgoing=True, regex=r"spam(?: |$|\n)([\s\S]*)"
 )    
 async def spam(event: NewMessage.Event) -> None:
