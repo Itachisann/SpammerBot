@@ -12,8 +12,8 @@ from userbot.utils.events import NewMessage
 from userbot.utils.helpers import restart
 
 @client.onMessage(
-    command=("`restart` `(Riavvia l'userbot)`", 'misc'),
-    outgoing=True, regex='restart$', builtin=True
+    command=("`spammer` `(Riavvia l'userbot)`", 'misc'),
+    outgoing=True, regex='spammer$', builtin=True
 )
 async def restarter(event: NewMessage.Event) -> None:
     await restart(event)
