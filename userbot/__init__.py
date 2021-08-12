@@ -16,7 +16,7 @@ from .utils.client import UserBotClient
 from .utils.log_formatter import CustomFormatter, CustomMemoryHandler
 
 
-__version__ = "0.6"
+__version__ = "v0.1"
 root = pathlib.Path(__file__).parent.parent
 
 session = "userbot"
