@@ -52,14 +52,14 @@ async def spam(event: NewMessage.Event) -> None:
     
     
 @client.onMessage(
-    command=("`stop` - `[Tempo in minuti][Messaggio]`", plugin_category),
+    command=("`stop` - `Ferma lo spammer`", plugin_category),
     outgoing=True, regex=r"stopspam(?: |$|\n)([\s\S]*)"
 )    
 
 async def stop(event: NewMessage.Event) -> None:
     global spam_val
-    if spam_val == true:   
+    if spam_val == True:   
         spam_val = False
         await event.respond("__Hai fermato lo spammer.__")
     else:
-        await event.respond("__Non è accesso lo spammer!__")        
+        await event.respond("__Non è accesso lo spammer!__")      
