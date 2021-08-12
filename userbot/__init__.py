@@ -68,7 +68,7 @@ except ValueError:
 
 if "telethon" not in config:
     print(
-        "You're not using a valid config, refer to the sample_config.ini"
+        "You're not using a valid config, refer to the config.ini"
     )
     sys.exit(1)
 
