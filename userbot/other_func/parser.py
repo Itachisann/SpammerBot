@@ -1,19 +1,3 @@
-# TG-UserBot - A modular Telegram UserBot script for Python.
-# Copyright (C) 2019  Kandarp <https://github.com/kandnub>
-#
-# TG-UserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# TG-UserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with TG-UserBot.  If not, see <https://www.gnu.org/licenses/>.
-
 
 import re
 from typing import Union
@@ -54,43 +38,25 @@ class Parser:
         about = usr_obj.about
         total_pics = (await event.client.get_profile_photos(user_id)).total
 
-        text = ""  # "**USER**\n"
-        text += f"  **ID:** [{user_id}](tg://user?id={user_id})"
+        text = ""#"<b>USER</b>\n\n"
         if first_name:
-            text += f"\n  **First name:** `{first_name}`"
+            text += f"\n  <b>👨🏻‍🔧 Nome:</b> {first_name}"
         if last_name:
-            text += f"\n  **Last name:** `{last_name}`"
+            text += f"\n  <b>🤵🏻 Cognome:</b> {last_name}"
+        if username:
+            text += f"\n  <b>🌐 Username:</b> @{username}"
+        text += f'  <b>\n  🆔 ID:</b> <a href="tg://user?id={user_id}">{user_id}</a>'
+        if is_bot:
+            text += f"\n  <b>🤖 Bot:</b> ✅"
+        else:
+            text += f"\n  <b>🤖 Bot:</b> ❌"
+        if common_chats_count:
+            text += f"\n  <b>💬 Chat In Comune:</b> {common_chats_count}"
+        if dc_id:
+            text += f"\n  <b>🔗 DC:</b> <code>{dc_id}</code>"
         if about:
             about = re.sub(r'(@\w{5,32})', r'`\1`', about, count=0)
-            text += re.sub(r'`{2}', r'', f"\n  **Bio:** `{about}`")
-        if username:
-            text += f"\n  **Username:** @{username}"
-        if common_chats_count:
-            text += f"\n  **Groups in common:** `{common_chats_count}`"
-        if dc_id:
-            text += f"\n  **DC ID:** `{dc_id}`"
-        if is_self:
-            text += f"\n  **Self:** `{is_self}`"
-        if contact:
-            text += f"\n  **Contact:** `{contact}`"
-        if mutual_contact:
-            text += f"\n  **Mutual contact:** `{mutual_contact}`"
-        if deleted:
-            text += f"\n  **Deleted:** `{deleted}`"
-        if is_bot:
-            text += f"\n  **Bot:** `{is_bot}`"
-        if verified:
-            text += f"\n  **Verified:** `{verified}`"
-        if support:
-            text += f"\n  **TG support team:** `{support}`"
-        if restricted:
-            text += f"\n  **Restricted for:** `{user.restriction_reason}`"
-        if blocked:
-            text += f"\n  **Blocked:** `{blocked}`"
-        if scam:
-            text += f"\n  **Scam:** `{scam}`"
-        if total_pics:
-            text += f"\n  **Total profile pictures:** `{total_pics}`"
+            text += re.sub(r'`{2}', r'', f"\n  <b>📕 Bio:\n </b> <code>{about}</code>")
         return text
 
     @staticmethod
@@ -109,63 +75,29 @@ class Parser:
         else:
             obj_type = "CHANNEL"
             participants = full_chat.participants_count
-            broadcast = chats.broadcast
-            megagroup = chats.megagroup
-            verified = chats.verified
-            admins = full_chat.admins_count
-            kicked = full_chat.kicked_count
-            banned = full_chat.banned_count
             online = full_chat.online_count
-
         chat_id = get_peer_id(full_chat.id)
         title = chats.title
-        creator = chats.creator
-        left = chats.left
         username = chats.username
-        dc_id = profile_pic.dc_id if hasattr(profile_pic, "dc_id") else None
         about = full_chat.about
         bots = len(full_chat.bot_info)
-        total_pics = (await event.client.get_profile_photos(chat_id)).total
 
-        text = ""  # f"**{obj_type}**\n"
-        if username:
-            text += f"  **ID:** [{chat_id}](tg://resolve?domain={username})"
-        else:
-            text += f"  **ID:** `{chat_id}`"
+        text = ""# f"<b>{obj_type}</b>\n"
         if title:
-            text += f"\n  **Title:** `{title}`"
+            text += f"\n  <b>👨🏻‍🔧 Nome:</b> `{title}`"
+        if username:
+            text += f"\n  <b>🌐 Username:</b> @{username}"
+            text += f'  <b>\n  🆔 ID:</b> <a href="tg://resolve?domain={username}">{chat_id}</a>'
+        else:
+            text += f"\n  <b>🆔 ID:</b> <code>{chat_id}</code>"
+        if participants:
+            text += f"\n  <b>🔗 Partecipanti:</b> `{participants}`"
+        if bots:
+            text += f"\n  <b>🤖 Bots:</b> <code>{bots}</code>"      
+        if obj_type == "CHANNEL":
+            if online:
+                text += f"\n  <b>📯 Online:</b> <code>{online}</code>"
         if about:
             about = re.sub(r'(@\w{5,32})', r'`\1`', about, count=0)
-            text += re.sub(r'`{2}', r'', f"\n  **About:** `{about}`")
-        if username:
-            text += f"\n  **Username:** @{username}"
-        if participants:
-            text += f"\n  **Total participants:** `{participants}`"
-        if creator:
-            text += f"\n  **Creator:** `{creator}`"
-        if left:
-            text += f"\n  **Left:** `{left}`"
-        if dc_id:
-            text += f"\n  **DC ID:** `{dc_id}`"
-        if bots:
-            text += f"\n  **Total bots:** `{bots}`"
-
-        if obj_type == "CHANNEL":
-            if admins:
-                text += f"\n  **Admins:** `{admins}`"
-            if kicked:
-                text += f"\n  **Kicked:** `{kicked}`"
-            if banned:
-                text += f"\n  **Banned:** `{banned}`"
-            if online:
-                text += f"\n  **Online:** `{online}`"
-            if broadcast:
-                text += f"\n  **Broadcast:** `{broadcast}`"
-            if megagroup:
-                text += f"\n  **Megagroup:** `{megagroup}`"
-            if verified:
-                text += f"\n  **Verified:** `{verified}`"
-
-        if total_pics:
-            text += f"\n  **Total profile pictures:** `{total_pics}`"
+            text += re.sub(r'`{2}', r'', f"\n  <b>📕 Bio:\n</b> <code>{about}</code>")                
         return text
