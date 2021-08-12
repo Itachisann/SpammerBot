@@ -19,9 +19,9 @@ async def helper(event: NewMessage.Event) -> None:
     enabled, senabled = await solve_commands(client.commands)
     prefix = client.prefix or '.'
     if arg:
-      text = "**🌍 Lista Comandi 🌍**\n\n"
+      text = "**🌍 Lista Comandi Spammer🌍**\n\n"
       text += "\n".join([f'.{name}' for name in sorted(enabled)])
-    await event.answer(text)
+    await event.respond(text)
 
 
 async def solve_commands(commands: dict) -> Tuple[dict, dict]:
