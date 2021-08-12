@@ -11,7 +11,7 @@ from userbot import client, LOGGER
 from userbot.other_func.parser import Parser
 from userbot.utils.events import NewMessage
 
-plugin_category = "functions_"
+plugin_category = "utils"
 
 @client.onMessage(
     command=("`spam` `[Numero messaggi] [Messaggio]`", plugin_category),
