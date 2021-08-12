@@ -1,18 +1,3 @@
-# TG-UserBot - A modular Telegram UserBot script for Python.
-# Copyright (C) 2019  Kandarp <https://github.com/kandnub>
-#
-# TG-UserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# TG-UserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with TG-UserBot.  If not, see <https://www.gnu.org/licenses/>.
 
 
 import asyncio
@@ -42,7 +27,7 @@ def printUser(entity: types.User) -> None:
     """Print the user's first name + last name upon start"""
     user = get_display_name(entity)
     print()
-    LOGGER.warning("Successfully logged in as {0}".format(user))
+    LOGGER.warning("Connessione completata a {0}".format(user))
 
 
 def printVersion(version: int, prefix: str) -> None:
@@ -50,8 +35,8 @@ def printVersion(version: int, prefix: str) -> None:
     if not prefix:
         prefix = '.'
     LOGGER.warning(
-        "UserBot v{0} is running, test it by sending {1}ping in"
-        " any chat.".format(version, prefix)
+        "UserBot {0} collegato. Prova a digitare {1}ping per verificare."
+        "in qualche chat.".format(version, prefix)
     )
     print()
 
