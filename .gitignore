@@ -16,8 +16,4 @@ userbot/utils/__pycache__/*
 sessions/__pycache__/*
 
 
-docs/build/
-docs/source/_build/
-
-
 .vscode/
