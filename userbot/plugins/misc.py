@@ -11,7 +11,7 @@ from telethon import utils
 from telethon.tl import functions, types
 
 from userbot import client, LOGGER
-from userbot.other_funcs import misc
+from userbot.other_func import misc
 from userbot.utils.helpers import get_chat_link
 from userbot.utils.events import NewMessage
 
