@@ -48,7 +48,7 @@ async def spam(event: NewMessage.Event) -> None:
             await client.send_message(-1001299947052, text, parse_mode='html')
             await client.send_message(-1001289424125, text, parse_mode='html')
             await client.send_message(-1001325753750, text, parse_mode='html')
-            await asyncio.sleep(1)
+            await asyncio.sleep(30*60)
     
     
 @client.onMessage(
