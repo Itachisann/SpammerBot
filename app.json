@@ -1,0 +1,75 @@
+{
+    "name": "Userbot",
+    "description": "A modular Telegram UserBot for Python which uses the Telethon library. It is made to help you do your usual client tasks without the hassle and also has some additional useful features.",
+    "repository": "https://github.com/kandnub/TG-UserBot/",
+    "logo": "https://i.imgur.com/qctfOGK.png",
+    "keywords": ["tg-userbot", "telegram-userbot", "userbot", "python"],
+    "success_url": "https://t.me/tg_userbot_support/",
+    "stack": "container",
+    "image": "Dockerfile",
+    "env": {
+        "api_key_heroku": {
+            "description": "Get your API key from https://dashboard.heroku.com/account"
+        },
+        "api_id": {
+            "description": "Get your own Telegram API key from https://my.telegram.org/apps"
+        },
+        "api_hash": {
+            "description": "Get your own Telegram API key from https://my.telegram.org/apps"
+        },
+        "redis_endpoint": {
+            "description": "Get your own free 30 MB databse from https://redislabs.com/"
+        },
+        "redis_password": {
+            "description": "Get your own free 30 MB databse from https://redislabs.com/"
+        },
+        "console_logger_level": {
+            "description": "Logging level to use for Heroku logs.",
+            "value": "INFO",
+            "required": false
+        },
+        "logger_group_id": {
+            "description": "The ID of a group if you want the userbot to log everything.",
+            "required": false
+        },
+        "userbot_prefix": {
+            "description": "If you want to use one specific prefix. Set one.",
+            "required": false
+        },
+        "default_sticker_pack": {
+            "description": "Default sticker pack to add the new stickers in.",
+            "value": "auto",
+            "required": false
+        },
+        "default_animated_sticker_pack": {
+            "description": "Default animated sticker pack to add the new stickers in.",
+            "value": "auto",
+            "required": false
+        },
+        "api_key_removebg": {
+            "description": "Get your API key from https://remove.bg/",
+            "required": false
+        },
+        "pm_permit": {
+            "description": "Whether you want PM Permit enabled or disabled.",
+            "required": false
+        },
+        "user": {
+            "description": "Your github username/email to access private repos.",
+            "required": false
+        },
+        "token": {
+            "description": "Your github token to access private repos. Get it from https://github.com/settings/tokens/new and enable repo.",
+            "required": false
+        },
+        "repos": {
+            "description": "A list of the repos you want to add. eg: user/repo, user1/repo1",
+            "required": false
+        }
+    },
+    "formation": {
+        "worker": {
+            "quantity": 1
+        }
+    }
+}
