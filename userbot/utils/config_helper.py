@@ -5,12 +5,11 @@ from distutils.util import strtobool
 
 sample_config_file = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    'sample_config.ini'
+    'config.ini'
 )
 
 
 def resolve_env(config: configparser.ConfigParser):
-    """Check the environment variables and add them a configparser obj"""
     api_id = os.getenv('api_id', None)
     api_hash = os.getenv('api_hash', None)
     redis_endpoint = os.getenv('redis_endpoint', None)
