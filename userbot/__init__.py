@@ -10,7 +10,6 @@ import sys
 import redis
 from telethon.tl import types
 
-from sessions.redis import RedisSession
 from .utils.config_helper import resolve_env
 from .utils.client import UserBotClient
 from .utils.log_formatter import CustomFormatter, CustomMemoryHandler
@@ -68,7 +67,7 @@ except ValueError:
 
 if "telethon" not in config:
     print(
-        "You're not using a valid config, refer to the config.ini"
+        "You're not using a valid config, refer to the sample_config.ini"
     )
     sys.exit(1)
 
@@ -116,9 +115,6 @@ if REDIS_ENDPOINT and REDIS_PASSWORD:
         sys.exit(1)
     LOGGER.debug("Connected to Redis successfully!")
     redis_db = redis_connection
-    if not sql_session.exists():
-        LOGGER.debug("Using Redis session!")
-        session = RedisSession("userbot", redis_connection)
 
 client = UserBotClient(
     session=session,
