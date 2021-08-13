@@ -9,8 +9,6 @@ import sys
 import time
 from typing import Tuple, Union
 
-from heroku3 import from_key
-
 from telethon import errors
 from telethon.tl import types
 from telethon.utils import get_display_name
@@ -24,29 +22,23 @@ LOGGER = logging.getLogger('userbot')
 
 
 def printUser(entity: types.User) -> None:
-    """Print the user's first name + last name upon start"""
     user = get_display_name(entity)
     print()
-    LOGGER.warning("Connessione completata a {0}".format(user))
+    LOGGER.warning("Connessione completata all'account {0}".format(user))
 
 
 def printVersion(version: int, prefix: str) -> None:
-    """Print the version of the bot with the default prefix"""
     if not prefix:
         prefix = '.'
     LOGGER.warning(
-        "UserBot {0} collegato. Prova a digitare {1}ping per verificare."
+        "UserBot {0} collegato. Prova a digitare {1}help per verificare"
         "in qualche chat.".format(version, prefix)
     )
     print()
 
 
 async def isRestart(client: UserBotClient) -> None:
-    """Check if the script restarted itself and edit the last message"""
     userbot_restarted = os.environ.get('userbot_restarted', False)
-    heroku = client.config['api_keys'].get('api_key_heroku', False)
-    updated = os.environ.pop('userbot_update', False)
-    disabled_commands = False
 
     async def success_edit(text):
         entity = int(userbot_restarted.split('/')[0])
@@ -58,55 +50,16 @@ async def isRestart(client: UserBotClient) -> None:
             errors.MessageNotModifiedError, errors.MessageIdInvalidError
         ):
             LOGGER.debug(f"Failed to edit message ({message}) in {entity}.")
-
-    if updated:
-        text = "`Successfully updated and restarted the userbot!`"
-    else:
-        text = '`Userbot riavviato.`'
+    text = '`Spammer riavviato.`'
     if userbot_restarted:
         del os.environ['userbot_restarted']
-        LOGGER.debug('Userbot was restarted! Editing the message.')
-        if os.environ.get('DYNO', False) and heroku:
-            heroku_conn = from_key(heroku)
-            HEROKU_APP = os.environ.get('HEROKU_APP_NAME', False)
-            if HEROKU_APP:
-                app = heroku_conn.apps()[HEROKU_APP]
-                for build in app.builds():
-                    if build.status == "pending":
-                        return
-                if app.config()['userbot_update']:
-                    del app.config()['userbot_update']
-                    await success_edit(
-                        "`Successfully deployed a new image to heroku "
-                        "and restarted the userbot.`"
-                    )
-                else:
-                    await success_edit(text)
-                del app.config()['userbot_restarted']
-                disabled_commands = app.config()['userbot_disabled_commands']
-                del app.config()['userbot_disabled_commands']
-        else:
-            await success_edit(text)
-            disabled_commands = os.environ.get(
-                'userbot_disabled_commands', False
-            )
-
-        if "userbot_disabled_commands" in os.environ:
-            del os.environ['userbot_disabled_commands']
-        if disabled_commands:
-            await disable_commands(client, disabled_commands)
+        LOGGER.debug('Userbot in riavvio..')
+        await success_edit(text)
 
 
 def restarter(client: UserBotClient) -> None:
     executable = sys.executable.replace(' ', '\\ ')
     args = [executable, '-m', 'userbot']
-    if client.disabled_commands:
-        disabled_list = ", ".join(client.disabled_commands.keys())
-        os.environ['userbot_disabled_commands'] = disabled_list
-    if os.environ.get('userbot_afk', False):
-        plugins_data.dump_AFK()
-    client._kill_running_processes()
-
     if sys.platform.startswith('win'):
         os.spawnle(os.P_NOWAIT, executable, *args, os.environ)
     else:
@@ -189,17 +142,6 @@ async def get_chat_link(
     return extra
 
 
-async def disable_commands(client: UserBotClient, commands: str) -> None:
-    commands = commands.split(", ")
-    for command in commands:
-        target = client.commands.get(command, False)
-        if target:
-            client.remove_event_handler(target.func)
-            client.disabled_commands.update({command: target})
-            del client.commands[command]
-            LOGGER.debug("Disabled command: %s", command)
-
-
 async def is_ffmpeg_there():
     cmd = await asyncio.create_subprocess_shell(
         'ffmpeg -version',
@@ -222,7 +164,6 @@ async def format_speed(speed_per_second, unit):
 
 
 class ProgressCallback():
-    """Custom class to handle upload and download progress."""
     def __init__(self, event, start=None, filen='unamed', update=5):
         self.event = event
         self.start = start or time.time()
@@ -236,7 +177,6 @@ class ProgressCallback():
         self.update = update
 
     async def resolve_prog(self, current, total):
-        """Calculate the necessary info and make a dict from it."""
         now = time.time()
         elp = now - self.start
         speed = int(float(current) / elp)
@@ -256,7 +196,6 @@ class ProgressCallback():
         }
 
     async def up_progress(self, current, total):
-        """Handle the upload progress only."""
         d = await self.resolve_prog(current, total)
         edit, finished = ul_prog(d, self)
         if finished:
@@ -271,7 +210,6 @@ class ProgressCallback():
             self.last_upload_edit = time.time()
 
     async def dl_progress(self, current, total):
-        """Handle the download progress only."""
         d = await self.resolve_prog(current, total)
         edit, finished = dl_prog(d, self)
         if finished:
@@ -296,10 +234,8 @@ async def calc_eta(elp: float, speed: int, current: int, total: int) -> int:
 
 
 def ul_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
-    """ Logs the upload progress """
     uploaded = cb._uploaded
     current = d.get('percentage', 0)
-    # now = datetime.datetime.now(datetime.timezone.utc)
     log_text = (
         "Uploaded %(current)s of %(total)s. "
         "Progress: %(percentage)s%% speed: %(speed)s"
@@ -321,10 +257,8 @@ def ul_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
 
 
 def dl_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
-    """ Logs the download progress """
     downloaded = cb._downloaded
     current = d.get('percentage', 0)
-    # now = datetime.datetime.now(datetime.timezone.utc)
     log_text = (
         "Downloaded %(current)s of %(total)s. "
         "Progress: %(percentage)s%%"
