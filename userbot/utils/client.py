@@ -1,19 +1,3 @@
-# TG-UserBot - A modular Telegram UserBot script for Python.
-# Copyright (C) 2019  Kandarp <https://github.com/kandnub>
-#
-# TG-UserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# TG-UserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with TG-UserBot.  If not, see <https://www.gnu.org/licenses/>.
-
 
 import configparser
 import dataclasses
@@ -47,7 +31,6 @@ class Command:
 
 
 class UserBotClient(TelegramClient):
-    """UserBot client with additional attributes inheriting TelegramClient"""
     commandcategories: Dict[str, List[str]] = {}
     commands: Dict[str, Command] = {}
     config: configparser.ConfigParser = None
@@ -72,8 +55,6 @@ class UserBotClient(TelegramClient):
         doc_args: dict = {},
         **kwargs
     ) -> callable:
-        """Method to register a function without the client"""
-
         kwargs.setdefault('forwards', False)
 
         def wrapper(func: callable) -> callable:
@@ -126,13 +107,11 @@ class UserBotClient(TelegramClient):
         ))
 
     def _updateconfig(self) -> bool:
-        """Update the config. Sync method to avoid issues."""
         with open('config.ini', 'w+') as configfile:
             self.config.write(configfile)
         return True
 
     def _kill_running_processes(self) -> None:
-        """Kill all the running asyncio subprocessess"""
         for _, process in self.running_processes.items():
             try:
                 process.kill()
