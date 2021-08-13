@@ -1,19 +1,3 @@
-# TG-UserBot - A modular Telegram UserBot script for Python.
-# Copyright (C) 2019  Kandarp <https://github.com/kandnub>
-#
-# TG-UserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# TG-UserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with TG-UserBot.  If not, see <https://www.gnu.org/licenses/>.
-
 
 import re
 from typing import Tuple
@@ -42,8 +26,6 @@ custom.Message.resanswer = resanswer
 
 @events.common.name_inner_event
 class NewMessage(events.NewMessage):
-    """Custom NewMessage event inheriting the default Telethon event"""
-
     def __init__(
         self,
         disable_prefix: bool = None,
@@ -52,7 +34,6 @@ class NewMessage(events.NewMessage):
         inline: bool = False,
         **kwargs
     ):
-        """Overriding the default init to add additional attributes"""
         super().__init__(**kwargs)
 
         if regex:
@@ -75,7 +56,6 @@ class NewMessage(events.NewMessage):
         self.inline = inline
 
     def filter(self, event):
-        """Overriding the default filter to check additional values"""
         _event = super().filter(event)
         if not _event:
             return
@@ -158,15 +138,8 @@ class NewMessage(events.NewMessage):
 
 @events.common.name_inner_event
 class MessageEdited(NewMessage):
-    """Custom MessageEdited event inheriting the custom NewMessage event"""
-
     @classmethod
     def build(cls, update, others=None, self_id=None):
-        """
-        Required to check if message is edited, double events.
-        Note: Don't handle UpdateEditChannelMessage from channels since the
-              update doesn't show which user edited the message
-        """
         if isinstance(update, types.UpdateEditMessage):
             return cls.Event(update.message)
         elif isinstance(update, types.UpdateEditChannelMessage):
@@ -179,5 +152,4 @@ class MessageEdited(NewMessage):
             return cls.Event(update.message)
 
     class Event(NewMessage.Event):
-        """Overriding the default Event which inherits Telethon's NewMessage"""
-        pass  # Required if we want a different name for it
+        pass 
