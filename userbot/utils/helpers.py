@@ -31,7 +31,7 @@ def printVersion(version: int, prefix: str) -> None:
     if not prefix:
         prefix = '.'
     LOGGER.warning(
-        "UserBot {0} collegato. Prova a digitare {1}ping per verificare".format(version, prefix)
+        "Spammer {0} collegato.".format(version, prefix)
     )
     print()
 
