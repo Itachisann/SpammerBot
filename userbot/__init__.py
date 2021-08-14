@@ -7,7 +7,6 @@ import pathlib
 import platform
 import sys
 
-import redis
 from telethon.tl import types
 
 from .utils.config_helper import resolve_env
@@ -19,11 +18,9 @@ __version__ = "v0.1"
 root = pathlib.Path(__file__).parent.parent
 
 session = "userbot"
-redis_db = False
 loop = None
 config = configparser.ConfigParser()
 config_file = pathlib.Path(root / 'config.ini')
-sql_session = pathlib.Path(root / 'userbot.session')
 
 ROOT_LOGGER = logging.getLogger()
 LOGGER = logging.getLogger(__name__)
@@ -36,7 +33,6 @@ logging.captureWarnings(True)
 
 if sys.platform.startswith('win'):
     from asyncio import ProactorEventLoop
-
     loop = ProactorEventLoop()
     os.system('color')
     os.system('cls')
@@ -74,8 +70,6 @@ if "telethon" not in config:
 telethon = config['telethon']
 API_ID = telethon.getint('api_id', False)
 API_HASH = telethon.get('api_hash', False)
-REDIS_ENDPOINT = telethon.get('redis_endpoint', False)
-REDIS_PASSWORD = telethon.get('redis_password', False)
 
 userbot = config['userbot']
 LOGGER_CHAT_ID = userbot.getint('logger_group_id', 0)
@@ -97,25 +91,6 @@ if not (API_ID and API_HASH):
     LOGGER.debug("No API keys!")
     sys.exit(1)
 
-if REDIS_ENDPOINT and REDIS_PASSWORD:
-    try:
-        REDIS_HOST = REDIS_ENDPOINT.split(':')[0]
-        REDIS_PORT = REDIS_ENDPOINT.split(':')[1]
-        redis_connection = redis.Redis(
-            host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD
-        )
-        redis_connection.ping()
-    except Exception as e:
-        LOGGER.exception(e)
-        print()
-        LOGGER.error(
-            "Make sure you have the correct Redis endpoint and password "
-            "and your machine can make connections."
-        )
-        sys.exit(1)
-    LOGGER.debug("Connected to Redis successfully!")
-    redis_db = redis_connection
-
 client = UserBotClient(
     session=session,
     api_id=API_ID,
@@ -128,7 +103,6 @@ client = UserBotClient(
 client.version = __version__
 client.config = config
 client.prefix = userbot.get('userbot_prefix', None)
-client.database = redis_db
 
 
 def verifyLoggerGroup(client: UserBotClient) -> None:
