@@ -18,7 +18,7 @@ from .events import NewMessage
 from userbot.plugins import plugins_data
 
 
-LOGGER = logging.getLogger('userbot')
+LOGGER = logging.getLogger('spammerbot')
 
 
 def printUser(entity: types.User) -> None:
