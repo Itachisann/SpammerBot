@@ -157,6 +157,7 @@ class PluginManager:
             self._import_plugin(name, path, content)
 
     def add_handlers(self) -> None:
+        """Apply event handlers to all the found callbacks."""
         for plugin in self.active_plugins:
             for callback in plugin.callbacks:
                 self.client.add_event_handler(callback.callback)
@@ -191,6 +192,7 @@ class PluginManager:
         return plugins
 
     def _resolve_repo(self) -> Tuple[Dict[str, str], Dict[str, str]]:
+        """Fetch all the files from a repository recusrively."""
         LOGGER.info("Fetching all the external plugins from git repos")
         plugins: Dict[str, str] = {}
         helpers: Dict[str, str] = {}
@@ -310,7 +312,6 @@ class PluginManager:
         return plugins, helpers
 
     def _import_plugin(self, name: str, path: str, content: str) -> None:
-        """Import file and bytecode plugins."""
         to_overwrite: Union[None, str] = None
         callbacks: List[Callback] = []
         ppath = self.plugin_path.absolute() / name.replace('.', '/') / '.py'
@@ -336,12 +337,10 @@ class PluginManager:
                 match = github_raw_pattern.search(path)
                 log += " from {}".format(match.group(1))
             else:
-                # Local files use SourceFileLoader
                 spec = importlib.util.find_spec(path)
 
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-            # To make plugins impoartable use "sys.modules[path] = module".
             sys.modules[ubotpath] = module
 
             for n, cb in vars(module).items():
@@ -359,7 +358,6 @@ class PluginManager:
             LOGGER.exception(e)
 
     def _import_helper(self, name: str, path: str, content: str) -> None:
-        """Import file and bytecode plugins."""
         ubotpath = "userbot." + name
         ppath = root / (ubotpath.replace('.', '/') + '.py')
         match = github_raw_pattern.search(path).group(1)
@@ -391,7 +389,6 @@ class PluginManager:
 
 
 def _split_plugins(to_split: str or list) -> None:
-    """Split the config's value for plugin keys."""
     if isinstance(to_split, str):
         return re.split(r"(?:\r\n|\n|, ?|\t| )", to_split)
     else:
@@ -399,7 +396,6 @@ def _split_plugins(to_split: str or list) -> None:
 
 
 async def get_pip_packages(requirements: str = None) -> list:
-    """Get a list of all the pacakage's names."""
     if requirements:
         packages = requirements
     else:
@@ -415,7 +411,6 @@ async def get_pip_packages(requirements: str = None) -> list:
 
 
 async def install_pip_packages(packages: List[str]) -> bool:
-    """Install pip packages."""
     args = ['-m', 'pip', 'install', '--upgrade', '--user']
     cmd = await asyncio.create_subprocess_exec(
         sys.executable.replace(' ', '\\ '), *args, *packages,
@@ -427,7 +422,6 @@ async def install_pip_packages(packages: List[str]) -> bool:
 
 
 def run_async(func: callable):
-    """Run async functions with the right event loop."""
     if sys.platform.startswith('win'):
         loop = asyncio.ProactorEventLoop()
     else:
@@ -436,7 +430,6 @@ def run_async(func: callable):
 
 
 def restart_script() -> None:
-    """Restart the current script."""
     executable = sys.executable.replace(' ', '\\ ')
     args = [executable, '-m', 'userbot']
     if sys.platform.startswith('win'):

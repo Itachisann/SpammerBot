@@ -43,6 +43,7 @@ async def answer(
     self_destruct: int = None,
     event: custom.Message = None
 ) -> typing.Union[None, custom.Message, typing.Sequence[custom.Message]]:
+    """Custom bound method for the Message object"""
     if hasattr(entity, 'get_input_chat'):
         entity = await entity.get_input_chat()
     message_out = None
@@ -258,8 +259,10 @@ async def resanswer(
             entity, message.format(**formats), **kwargs
         )
 
+    # Wouldn't want to reply to a random message in a different groupchat
     kwargs.pop('reply_to', None)
     kwargs.pop('reply', None)
+    # Only use a different chat_id for extra messages
     chat_id = getattr(mod, 'chat_id', chat_id)
     if isinstance(chat_id, str) and chat_id.isdigit():
         chat_id = int(chat_id)
@@ -280,6 +283,7 @@ async def resanswer(
 
 
 async def _resolve_entities(message: str, entities: list) -> dict:
+    """Don't even bother trying to figure this mess out"""
     messages = []
     while entities:
         end = 100 if len(entities) >= 100 else len(entities)
@@ -306,7 +310,7 @@ async def _resolve_entities(message: str, entities: list) -> dict:
                 message = message[msg_end:]
                 await _reset_entities(entities, msg_end, next_offset)
                 continue
-            end = end + 1
+            end = end + 1  # We don't want the index
 
         _, last_chunk = await _next_offset(end, entities)
         if not last_chunk:
@@ -333,6 +337,7 @@ async def _resolve_entities(message: str, entities: list) -> dict:
 
 
 async def _reset_entities(entities: list, end: int, next_offset: int) -> None:
+    """Reset the offset of entities's list which has been cut"""
     offset = entities[0].offset
     increment = 0 if next_offset == end else next_offset - end
     for entity in entities:
@@ -340,10 +345,12 @@ async def _reset_entities(entities: list, end: int, next_offset: int) -> None:
 
 
 async def _next_offset(end, entities) -> typing.Tuple[int, bool]:
+    """Find out how much length we need to skip ahead for the next entities"""
     last_chunk = False
     if len(entities) >= end+1:
         next_offset = entities[end].offset
     else:
+        # It's always the last entity so just grab the last index
         next_offset = entities[-1].offset + entities[-1].length
         last_chunk = True
     return next_offset, last_chunk

@@ -5,15 +5,14 @@ from distutils.util import strtobool
 
 sample_config_file = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-    'config.ini'
+    'sample_config.ini'
 )
 
 
 def resolve_env(config: configparser.ConfigParser):
+    """Check the environment variables and add them a configparser obj"""
     api_id = os.getenv('api_id', None)
     api_hash = os.getenv('api_hash', None)
-    redis_endpoint = os.getenv('redis_endpoint', None)
-    redis_password = os.getenv('redis_password', None)
 
     if "telethon" in config.sections() and not api_id and not api_hash:
         api_id = config['telethon'].get('api_id', False)
@@ -30,11 +29,6 @@ def resolve_env(config: configparser.ConfigParser):
 
     config['telethon']['api_id'] = api_id
     config['telethon']['api_hash'] = api_hash
-    if redis_endpoint:
-        config['telethon']['redis_endpoint'] = redis_endpoint
-    if redis_password:
-        config['telethon']['redis_password'] = redis_password
-
     userbot = {
         'userbot_regexninja': strtobool(
             os.getenv('userbot_regexninja', 'False')

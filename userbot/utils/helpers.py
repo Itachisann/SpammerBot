@@ -31,15 +31,13 @@ def printVersion(version: int, prefix: str) -> None:
     if not prefix:
         prefix = '.'
     LOGGER.warning(
-        "UserBot {0} collegato. Prova a digitare {1}help per verificare"
-        "in qualche chat.".format(version, prefix)
+        "UserBot {0} collegato. Prova a digitare {1}ping per verificare".format(version, prefix)
     )
     print()
 
 
 async def isRestart(client: UserBotClient) -> None:
     userbot_restarted = os.environ.get('userbot_restarted', False)
-
     async def success_edit(text):
         entity = int(userbot_restarted.split('/')[0])
         message = int(userbot_restarted.split('/')[1])
@@ -50,16 +48,19 @@ async def isRestart(client: UserBotClient) -> None:
             errors.MessageNotModifiedError, errors.MessageIdInvalidError
         ):
             LOGGER.debug(f"Failed to edit message ({message}) in {entity}.")
-    text = '`Spammer riavviato.`'
+    text = '`Userbot riavviato.`'
     if userbot_restarted:
         del os.environ['userbot_restarted']
-        LOGGER.debug('Userbot in riavvio..')
+        LOGGER.debug('Userbot was restarted! Editing the message.')
         await success_edit(text)
 
 
 def restarter(client: UserBotClient) -> None:
     executable = sys.executable.replace(' ', '\\ ')
     args = [executable, '-m', 'userbot']
+    if os.environ.get('userbot_afk', False):
+        plugins_data.dump_AFK()
+    client._kill_running_processes()
     if sys.platform.startswith('win'):
         os.spawnle(os.P_NOWAIT, executable, *args, os.environ)
     else:
@@ -177,6 +178,7 @@ class ProgressCallback():
         self.update = update
 
     async def resolve_prog(self, current, total):
+        """Calculate the necessary info and make a dict from it."""
         now = time.time()
         elp = now - self.start
         speed = int(float(current) / elp)
@@ -196,6 +198,7 @@ class ProgressCallback():
         }
 
     async def up_progress(self, current, total):
+        """Handle the upload progress only."""
         d = await self.resolve_prog(current, total)
         edit, finished = ul_prog(d, self)
         if finished:
@@ -210,6 +213,7 @@ class ProgressCallback():
             self.last_upload_edit = time.time()
 
     async def dl_progress(self, current, total):
+        """Handle the download progress only."""
         d = await self.resolve_prog(current, total)
         edit, finished = dl_prog(d, self)
         if finished:
@@ -234,8 +238,10 @@ async def calc_eta(elp: float, speed: int, current: int, total: int) -> int:
 
 
 def ul_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
+    """ Logs the upload progress """
     uploaded = cb._uploaded
     current = d.get('percentage', 0)
+    # now = datetime.datetime.now(datetime.timezone.utc)
     log_text = (
         "Uploaded %(current)s of %(total)s. "
         "Progress: %(percentage)s%% speed: %(speed)s"
@@ -257,8 +263,10 @@ def ul_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
 
 
 def dl_prog(d: dict, cb: ProgressCallback) -> Tuple[Union[str, bool], bool]:
+    """ Logs the download progress """
     downloaded = cb._downloaded
     current = d.get('percentage', 0)
+    # now = datetime.datetime.now(datetime.timezone.utc)
     log_text = (
         "Downloaded %(current)s of %(total)s. "
         "Progress: %(percentage)s%%"

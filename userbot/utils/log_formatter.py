@@ -1,18 +1,3 @@
-# TG-UserBot - A modular Telegram UserBot script for Python.
-# Copyright (C) 2019  Kandarp <https://github.com/kandnub>
-#
-# TG-UserBot is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# TG-UserBot is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with TG-UserBot.  If not, see <https://www.gnu.org/licenses/>.
 
 
 import logging
@@ -20,16 +5,15 @@ import logging.handlers
 import os
 
 
-HEROKU = os.environ.get('DYNO', False)
-CCRI = '\033[48;5;124m' if not HEROKU else ''  # CRITICAL
-CERR = '\033[38;5;124m' if not HEROKU else ''  # ERROR
-CWAR = '\033[38;5;202m' if not HEROKU else ''  # WARNING
-CINF = '\033[38;5;15m' if not HEROKU else ''  # INFO
-CDEB = '\033[38;5;28m' if not HEROKU else ''  # DEBUG
-CEND = '\033[0m' if not HEROKU else ''  # ANSI END
-CORA = '\033[33;1m' if not HEROKU else ''  # ORANGE
-CBOT = '\033[94;1m' if not HEROKU else ''  # BOT (blue?)
-CUSR = '\033[38;5;118m' if not HEROKU else ''  # USER (white?)
+CCRI = '\033[48;5;124m' # CRITICAL
+CERR = '\033[38;5;124m' # ERROR
+CWAR = '\033[38;5;202m'  # WARNING
+CINF = '\033[38;5;15m'  # INFO
+CDEB = '\033[38;5;28m' # DEBUG
+CEND = '\033[0m'  # ANSI END
+CORA = '\033[33;1m' # ORANGE
+CBOT = '\033[94;1m'  # BOT (blue?)
+CUSR = '\033[38;5;118m' # USER (white?)
 
 
 class CustomPercentStyle(logging.PercentStyle):
@@ -40,10 +24,7 @@ class CustomPercentStyle(logging.PercentStyle):
         """Use ANSI escape code for the default format, else ignore it"""
         super().format(record)
         if self._fmt == self.default_format:
-            if HEROKU:
-                first = "[%s] " % (record.levelname[:1])
-            else:
-                first = "[%(asctime)s / %(levelname)s] "
+            first = "[%(asctime)s / %(levelname)s] "
 
             if record.name == "root":
                 second = f"{CCRI}%(name)s:{CEND} %(message)s"

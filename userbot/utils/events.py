@@ -26,6 +26,8 @@ custom.Message.resanswer = resanswer
 
 @events.common.name_inner_event
 class NewMessage(events.NewMessage):
+    """Custom NewMessage event inheriting the default Telethon event"""
+
     def __init__(
         self,
         disable_prefix: bool = None,
@@ -34,6 +36,7 @@ class NewMessage(events.NewMessage):
         inline: bool = False,
         **kwargs
     ):
+        """Overriding the default init to add additional attributes"""
         super().__init__(**kwargs)
 
         if regex:
@@ -56,6 +59,7 @@ class NewMessage(events.NewMessage):
         self.inline = inline
 
     def filter(self, event):
+        """Overriding the default filter to check additional values"""
         _event = super().filter(event)
         if not _event:
             return
@@ -138,8 +142,15 @@ class NewMessage(events.NewMessage):
 
 @events.common.name_inner_event
 class MessageEdited(NewMessage):
+    """Custom MessageEdited event inheriting the custom NewMessage event"""
+
     @classmethod
     def build(cls, update, others=None, self_id=None):
+        """
+        Required to check if message is edited, double events.
+        Note: Don't handle UpdateEditChannelMessage from channels since the
+              update doesn't show which user edited the message
+        """
         if isinstance(update, types.UpdateEditMessage):
             return cls.Event(update.message)
         elif isinstance(update, types.UpdateEditChannelMessage):
@@ -152,4 +163,5 @@ class MessageEdited(NewMessage):
             return cls.Event(update.message)
 
     class Event(NewMessage.Event):
-        pass 
+        """Overriding the default Event which inherits Telethon's NewMessage"""
+        pass  # Required if we want a different name for it

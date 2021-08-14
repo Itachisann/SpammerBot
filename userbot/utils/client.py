@@ -1,4 +1,5 @@
 
+
 import configparser
 import dataclasses
 import inspect
@@ -31,6 +32,7 @@ class Command:
 
 
 class UserBotClient(TelegramClient):
+    """UserBot client with additional attributes inheriting TelegramClient"""
     commandcategories: Dict[str, List[str]] = {}
     commands: Dict[str, Command] = {}
     config: configparser.ConfigParser = None
@@ -55,6 +57,8 @@ class UserBotClient(TelegramClient):
         doc_args: dict = {},
         **kwargs
     ) -> callable:
+        """Method to register a function without the client"""
+
         kwargs.setdefault('forwards', False)
 
         def wrapper(func: callable) -> callable:
@@ -107,11 +111,13 @@ class UserBotClient(TelegramClient):
         ))
 
     def _updateconfig(self) -> bool:
+        """Update the config. Sync method to avoid issues."""
         with open('config.ini', 'w+') as configfile:
             self.config.write(configfile)
         return True
 
     def _kill_running_processes(self) -> None:
+        """Kill all the running asyncio subprocessess"""
         for _, process in self.running_processes.items():
             try:
                 process.kill()
