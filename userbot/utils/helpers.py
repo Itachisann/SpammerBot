@@ -58,9 +58,6 @@ async def isRestart(client: UserBotClient) -> None:
 def restarter(client: UserBotClient) -> None:
     executable = sys.executable.replace(' ', '\\ ')
     args = [executable, '-m', 'userbot']
-    if os.environ.get('userbot_afk', False):
-        plugins_data.dump_AFK()
-    client._kill_running_processes()
     if sys.platform.startswith('win'):
         os.spawnle(os.P_NOWAIT, executable, *args, os.environ)
     else:
