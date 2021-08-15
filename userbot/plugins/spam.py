@@ -29,7 +29,7 @@ async def spam(event: NewMessage.Event) -> None:
                 try:
                     await client.send_message(ID, text, parse_mode='html')
                 except:
-                    pass    
+                    LOGGER.error(f"Modalità lenta attiva in {ID}")   
             await asyncio.sleep(30*60)
             
 if spam_val == True:      
