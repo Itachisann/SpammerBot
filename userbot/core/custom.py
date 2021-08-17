@@ -9,10 +9,9 @@ import re
 import typing
 
 from telethon import errors, events
-from telethon.extensions import markdown, html
+from telethon.extensions import html, markdown
+from telethon.hints import DateLike, FileLike, MarkupLike
 from telethon.tl import custom, functions, types
-from telethon.hints import FileLike, MarkupLike, DateLike
-
 
 LOGGER = logging.getLogger(__name__)
 MAXLIM: int = 4096
@@ -43,7 +42,6 @@ async def answer(
     self_destruct: int = None,
     event: custom.Message = None
 ) -> typing.Union[None, custom.Message, typing.Sequence[custom.Message]]:
-    """Custom bound method for the Message object"""
     if hasattr(entity, 'get_input_chat'):
         entity = await entity.get_input_chat()
     message_out = None

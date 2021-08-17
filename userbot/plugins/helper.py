@@ -1,26 +1,23 @@
-import os.path
 import re
 from typing import Tuple
 
 from userbot import client
-from userbot.utils.events import NewMessage
-
+from userbot.core.events import NewMessage
 
 plugin_category: str = "helper"
 split_exp: re.Pattern = re.compile(r'\||\/')
 
 
-@client.onMessage(
+@client.createCommand(
     command=("`help`", plugin_category), builtin=True,
     outgoing=True, regex=r"help"
 )
 async def helper(event: NewMessage.Event) -> None:
     arg = event.matches[0].group(0)
     enabled, senabled = await solve_commands(client.commands)
-    prefix = client.prefix or '.'
     if arg:
-      text = "**🌍 Lista Comandi Spammer🌍**\n\n"
-      text += "\n".join([f'.{name}' for name in sorted(enabled)])
+        text = "**🌍 Lista Comandi Spammer🌍**\n\n"
+        text += "\n".join([f'.{name}' for name in sorted(enabled)])
     await event.respond(text)
 
 

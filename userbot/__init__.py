@@ -9,15 +9,14 @@ import sys
 
 from telethon.tl import types
 
-from .utils.config_helper import resolve_env
-from .utils.client import UserBotClient
-from .utils.log_formatter import CustomFormatter, CustomMemoryHandler
-
+from .core.client import UserBotClient
+from .core.config_helper import resolve_env
+from .core.log_formatter import CustomFormatter, CustomMemoryHandler
 
 __version__ = "v0.1"
 root = pathlib.Path(__file__).parent.parent
 
-session = "userbot"
+session = "spammerbot"
 loop = None
 config = configparser.ConfigParser()
 config_file = pathlib.Path(root / 'config.ini')
@@ -41,10 +40,6 @@ else:
 
 
 if platform.python_version_tuple() < ('3', '7', '3'):
-    print(
-        "Please run this script with Python 3.7.3 or above."
-        "\nExiting the script."
-    )
     sys.exit(1)
 
 if config_file.exists():
@@ -54,17 +49,9 @@ if config_file.exists():
 try:
     resolve_env(config)
 except ValueError:
-    print(
-        "Please make sure you have a proper config.ini in this directory "
-        "or the required environment variables set."
-        "\nExiting the script."
-    )
     sys.exit(1)
 
 if "telethon" not in config:
-    print(
-        "You're not using a valid config, refer to the sample_config.ini"
-    )
     sys.exit(1)
 
 telethon = config['telethon']

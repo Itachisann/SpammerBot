@@ -8,10 +8,11 @@ from telethon.errors import AuthKeyError, InvalidBufferError
 
 import userbot
 from userbot import client
-from .utils import helpers, pluginManager
 
+from .core import helpers, pluginManager
 
 LOGGER = logging.getLogger('userbot')
+
 
 def wakeup():
     client.loop.call_later(0.1, wakeup)

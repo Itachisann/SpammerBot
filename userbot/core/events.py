@@ -26,8 +26,6 @@ custom.Message.resanswer = resanswer
 
 @events.common.name_inner_event
 class NewMessage(events.NewMessage):
-    """Custom NewMessage event inheriting the default Telethon event"""
-
     def __init__(
         self,
         disable_prefix: bool = None,
@@ -36,7 +34,6 @@ class NewMessage(events.NewMessage):
         inline: bool = False,
         **kwargs
     ):
-        """Overriding the default init to add additional attributes"""
         super().__init__(**kwargs)
 
         if regex:

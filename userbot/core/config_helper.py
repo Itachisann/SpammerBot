@@ -2,7 +2,6 @@ import configparser
 import os
 from distutils.util import strtobool
 
-
 sample_config_file = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
     'sample_config.ini'
@@ -10,7 +9,6 @@ sample_config_file = os.path.join(
 
 
 def resolve_env(config: configparser.ConfigParser):
-    """Check the environment variables and add them a configparser obj"""
     api_id = os.getenv('api_id', None)
     api_hash = os.getenv('api_hash', None)
 
@@ -36,23 +34,9 @@ def resolve_env(config: configparser.ConfigParser):
         'self_destruct_msg': strtobool(
             os.getenv('self_destruct_msg', 'True')
         ),
-        'pm_permit': strtobool(os.getenv('pm_permit', 'False')),
         'console_logger_level': os.getenv('console_logger_level', None),
         'logger_group_id': int(os.getenv('logger_group_id', 0)),
-        'userbot_prefix': os.getenv('userbot_prefix', None),
-        'default_sticker_pack': os.getenv('default_sticker_pack', None),
-        'default_animated_sticker_pack': os.getenv(
-            'default_animated_sticker_pack', None
-        )
-    }
-
-    api_keys = {
-        'api_key_heroku': os.getenv(
-            'api_key_heroku', None
-        ),
-        'api_key_removebg': os.getenv(
-            'api_key_removebg', None
-        )
+        'userbot_prefix': os.getenv('userbot_prefix', None)
     }
 
     plugins = {
@@ -68,7 +52,6 @@ def resolve_env(config: configparser.ConfigParser):
     }
 
     make_config(config, 'userbot', userbot)
-    make_config(config, 'api_keys', api_keys)
     make_config(config, 'plugins', plugins)
 
 

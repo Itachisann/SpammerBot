@@ -15,8 +15,6 @@ from telethon.utils import get_display_name
 
 from .client import UserBotClient
 from .events import NewMessage
-from userbot.plugins import plugins_data
-
 
 LOGGER = logging.getLogger('spammerbot')
 
@@ -38,6 +36,7 @@ def printVersion(version: int, prefix: str) -> None:
 
 async def isRestart(client: UserBotClient) -> None:
     userbot_restarted = os.environ.get('userbot_restarted', False)
+
     async def success_edit(text):
         entity = int(userbot_restarted.split('/')[0])
         message = int(userbot_restarted.split('/')[1])
@@ -48,7 +47,7 @@ async def isRestart(client: UserBotClient) -> None:
             errors.MessageNotModifiedError, errors.MessageIdInvalidError
         ):
             LOGGER.debug(f"Failed to edit message ({message}) in {entity}.")
-    text = '`Userbot riavviato.`'
+    text = '`Spammer riavviato.`'
     if userbot_restarted:
         del os.environ['userbot_restarted']
         LOGGER.debug('Userbot was restarted! Editing the message.')

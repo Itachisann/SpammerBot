@@ -2,8 +2,6 @@
 
 import logging
 import logging.handlers
-import os
-
 
 CCRI = '\033[48;5;124m' # CRITICAL
 CERR = '\033[38;5;124m' # ERROR
