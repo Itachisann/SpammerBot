@@ -11,7 +11,7 @@ array_groups_id = [-1001488898663, -1001230649113, -1001189316065, -100142043202
 
 
 @client.createCommand(
-    command=("`spam` - `[Messaggio]`", plugin_category),
+    command=("`spam` - `Inizia lo spam`", plugin_category),
     outgoing=True, regex=r"spam(?: |$|\n)([\s\S]*)"
 )
 async def spam(event: NewMessage.Event) -> None:
