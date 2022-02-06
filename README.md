@@ -36,7 +36,7 @@ $ python3 -m userbot
 # 
 
 ## Developing
-* You need to have an account or VoIP, and set ChatID of these groups in [Spam.py][spam]
+* You need to have an account or VoIP, and set the params [params.py][params]
 
 # 
 ## Inspiration and Credits:
@@ -87,4 +87,4 @@ $ python3 -m userbot
    [telethon]: <https://github.com/LonamiWebs/Telethon/>
    [tguserbot]: <https://github.com/TG-UserBot/TG-UserBot>
    [tg-apps]: <https://my.telegram.org/apps>
-   [spam]: <https://github.com/Itachisann/SpammerBot/blob/main/userbot/plugins/spam.py#:~:text=spam_val%20%3D%20False-,array_groups_id,-%3D%20%5B%2D1001488898663%2C%20%2D1001230649113%2C%20%2D1001189316065>
+   [params]: <https://github.com/Itachisann/SpammerBot/blob/main/userbot/plugins/params.py>
