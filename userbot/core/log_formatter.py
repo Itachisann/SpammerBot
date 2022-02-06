@@ -3,15 +3,15 @@
 import logging
 import logging.handlers
 
-CCRI = '\033[48;5;124m' # CRITICAL
-CERR = '\033[38;5;124m' # ERROR
+CCRI = '\033[48;5;124m'  # CRITICAL
+CERR = '\033[38;5;124m'  # ERROR
 CWAR = '\033[38;5;202m'  # WARNING
 CINF = '\033[38;5;15m'  # INFO
-CDEB = '\033[38;5;28m' # DEBUG
+CDEB = '\033[38;5;28m'  # DEBUG
 CEND = '\033[0m'  # ANSI END
-CORA = '\033[33;1m' # ORANGE
+CORA = '\033[33;1m'  # ORANGE
 CBOT = '\033[94;1m'  # BOT (blue?)
-CUSR = '\033[38;5;118m' # USER (white?)
+CUSR = '\033[38;5;118m'  # USER (white?)
 
 
 class CustomPercentStyle(logging.PercentStyle):

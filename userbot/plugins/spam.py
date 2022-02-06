@@ -3,7 +3,7 @@ import threading
 
 from userbot import LOGGER, client
 from userbot.core.events import NewMessage
-from params import array_groups_id, spam_message, mode, link_preview, tag_message, every
+from .params import array_groups_id, spam_message, mode, link_preview, tag_message, every
 
 plugin_category = "utils"
 spam_val = False
